@@ -1,8 +1,7 @@
 package com.mealmatch.mealmatchapi.controller;
-import com.mealmatch.mealmatchapi.dao.UserDAO;
+import com.mealmatch.mealmatchapi.dao.user.UserDAO;
 import com.mealmatch.mealmatchapi.model.ApiResponse;
 import com.mealmatch.mealmatchapi.model.User;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,8 +32,14 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{userId}")
     @ResponseBody
-    ApiResponse<Optional<User>> getUserById(@PathVariable Long userId){
-        Optional<User> user = this.userDAO.getUserById(userId);
-        return new ApiResponse<>(HttpStatus.ACCEPTED, user);
+    ApiResponse<Optional<User>> getUserById(@PathVariable Long userId) {
+        try {
+            Optional<User> user = this.userDAO.getUserById(userId);
+            return new ApiResponse<>(HttpStatus.ACCEPTED, user);
+        } catch (Exception e){
+            return new ApiResponse<>(HttpStatus.NOT_FOUND, "User not found");
+        }
     }
+
+
 }

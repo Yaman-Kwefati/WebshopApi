@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 public class DatabaseSeeder {
     @Autowired
     UserSeeder userSeeder;
+    @Autowired
+    OrganizationSeeder organizationSeeder;
     private boolean alreadySeeded = false;
 
 
@@ -17,6 +19,7 @@ public class DatabaseSeeder {
         if(alreadySeeded){
             return;
         }
+        organizationSeeder.seed();
         userSeeder.seed();
         this.alreadySeeded = true;
     }

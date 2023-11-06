@@ -1,6 +1,6 @@
 package com.mealmatch.mealmatchapi.seeder;
 
-import com.mealmatch.mealmatchapi.dao.UserDAO;
+import com.mealmatch.mealmatchapi.dao.user.UserDAO;
 import com.mealmatch.mealmatchapi.model.Role;
 import com.mealmatch.mealmatchapi.model.User;
 import lombok.RequiredArgsConstructor;

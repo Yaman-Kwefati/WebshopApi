@@ -1,6 +1,6 @@
 package com.mealmatch.mealmatchapi.config;
 
-import com.mealmatch.mealmatchapi.dao.UserRepository;
+import com.mealmatch.mealmatchapi.dao.user.UserRepository;
 import com.mealmatch.mealmatchapi.model.User;
 import com.mealmatch.mealmatchapi.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;

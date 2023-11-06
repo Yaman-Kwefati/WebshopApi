@@ -1,4 +1,4 @@
-package com.mealmatch.mealmatchapi.dao;
+package com.mealmatch.mealmatchapi.dao.user;
 import com.mealmatch.mealmatchapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
