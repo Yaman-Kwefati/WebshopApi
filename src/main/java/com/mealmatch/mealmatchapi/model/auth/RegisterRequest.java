@@ -1,5 +1,6 @@
-package com.mealmatch.mealmatchapi.model;
+package com.mealmatch.mealmatchapi.model.auth;
 
+import com.mealmatch.mealmatchapi.model.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
