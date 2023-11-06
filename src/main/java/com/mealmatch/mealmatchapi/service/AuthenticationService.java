@@ -1,6 +1,6 @@
 package com.mealmatch.mealmatchapi.service;
 
-import com.mealmatch.mealmatchapi.dao.UserRepository;
+import com.mealmatch.mealmatchapi.dao.user.UserRepository;
 import com.mealmatch.mealmatchapi.model.auth.AuthenticationRequest;
 import com.mealmatch.mealmatchapi.model.auth.AuthenticationResponse;
 import com.mealmatch.mealmatchapi.model.auth.RegisterRequest;

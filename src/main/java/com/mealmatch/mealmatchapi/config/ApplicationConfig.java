@@ -1,6 +1,6 @@
 package com.mealmatch.mealmatchapi.config;
 
-import com.mealmatch.mealmatchapi.dao.UserRepository;
+import com.mealmatch.mealmatchapi.dao.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
