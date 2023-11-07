@@ -40,6 +40,4 @@ public class UserController {
             return new ApiResponse<>(HttpStatus.NOT_FOUND, "User not found");
         }
     }
-
-
 }

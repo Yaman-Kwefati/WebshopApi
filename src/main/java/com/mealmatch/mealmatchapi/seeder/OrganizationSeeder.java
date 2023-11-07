@@ -6,6 +6,7 @@ import com.mealmatch.mealmatchapi.model.Organization;
 import com.mealmatch.mealmatchapi.model.Role;
 import com.mealmatch.mealmatchapi.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,12 +14,13 @@ import org.springframework.stereotype.Component;
 public class OrganizationSeeder {
     private final OrganizationDAO organizationDAO;
     private final UserDAO userDAO;
+    private final PasswordEncoder passwordEncoder;
     public void seed(){
         User newUser = User.builder()
                 .firstname("Yaman")
                 .lastname("Kwefati")
                 .email("yamankwefati20@gmail.com")
-                .password("testPassword")
+                .password(passwordEncoder.encode("testPassword"))
                 .phoneNumber("0625112776")
                 .city("Bodegraven")
                 .street("Koninginneweg 124")
