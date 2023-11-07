@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
 //    public User getByContact_person(Long contactPersonId);
+    Organization findByNameAndStreet(String name, String street);
 }

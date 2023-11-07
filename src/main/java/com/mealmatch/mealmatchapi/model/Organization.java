@@ -1,11 +1,16 @@
 package com.mealmatch.mealmatchapi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.NonFinal;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -28,4 +33,7 @@ public class Organization {
     @OneToOne
     @JoinColumn(name = "contact_person")
     private User contact_person;
+    @OneToMany(mappedBy = "organizationId")
+    @JsonManagedReference
+    private List<HoursOfOperation> hoursOfOperations;
 }

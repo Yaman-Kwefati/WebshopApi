@@ -11,6 +11,8 @@ public class DatabaseSeeder {
     UserSeeder userSeeder;
     @Autowired
     OrganizationSeeder organizationSeeder;
+    @Autowired
+    HoursOfOperationSeeder hoursOfOperationSeeder;
     private boolean alreadySeeded = false;
 
 
@@ -21,6 +23,7 @@ public class DatabaseSeeder {
         }
         organizationSeeder.seed();
         userSeeder.seed();
+        this.hoursOfOperationSeeder.seed();
         this.alreadySeeded = true;
     }
 }

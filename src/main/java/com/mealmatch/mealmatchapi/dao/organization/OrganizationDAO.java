@@ -3,6 +3,7 @@ package com.mealmatch.mealmatchapi.dao.organization;
 import com.mealmatch.mealmatchapi.model.Organization;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -13,12 +14,20 @@ public class OrganizationDAO {
         this.organizationRepository = organizationRepository;
     }
 
+    public List<Organization> getAllOrganizations(){
+        return this.organizationRepository.findAll();
+    }
+
     public Optional<Organization> getById(Long organizationId){
         return Optional.of(this.organizationRepository.findById(organizationId).get());
     }
 
-    public void saveNewOrganization(Organization organization){
-        this.organizationRepository.save(organization);
+    public Organization saveNewOrganization(Organization organization){
+        Organization existingOrganization = this.organizationRepository.findByNameAndStreet(organization.getName(), organization.getStreet());
+        if (existingOrganization != null){
+            return existingOrganization;
+        }
+        return this.organizationRepository.save(organization);
     }
 
 }
