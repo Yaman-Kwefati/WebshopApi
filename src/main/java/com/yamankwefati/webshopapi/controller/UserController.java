@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET, value = "/{userId}")
     @ResponseBody
     ApiResponse<Optional<User>> getUserById(@PathVariable Long userId) {
+
         try {
             Optional<User> user = this.userDAO.getUserById(userId);
             return new ApiResponse<>(HttpStatus.ACCEPTED, user);
