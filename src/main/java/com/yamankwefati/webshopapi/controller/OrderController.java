@@ -60,4 +60,18 @@ public class OrderController {
         }
     }
 
+    //Update an order
+    @RequestMapping(method = RequestMethod.PUT, value = "/{orderId}")
+    @ResponseBody
+    public ApiResponse<ShopOrder> updateOrder(
+            @RequestBody ShopOrder shopOrderRequest,
+            @PathVariable Long orderId
+    ){
+        try {
+            ShopOrder order = this.orderDAO.updateOrder(shopOrderRequest, orderId);
+            return new ApiResponse<>(HttpStatus.ACCEPTED, order);
+        } catch (Exception e) {
+            return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Couldn't place order.");
+        }
+    }
 }

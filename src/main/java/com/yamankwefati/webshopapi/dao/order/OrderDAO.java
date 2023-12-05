@@ -3,6 +3,7 @@ package com.yamankwefati.webshopapi.dao.order;
 import com.yamankwefati.webshopapi.dao.user.UserRepository;
 import com.yamankwefati.webshopapi.model.ShopOrder;
 import com.yamankwefati.webshopapi.model.User;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -42,6 +43,16 @@ public class OrderDAO {
                 .totalAmount(shopOrder.getTotalAmount())
                 .userId(shopOrder.getUserId())
                 .build();
+        return this.orderRepository.save(order);
+    }
+
+    public ShopOrder updateOrder(ShopOrder newOrder, Long orderId) throws NotFoundException {
+        Optional<ShopOrder> oldOrder = this.orderRepository.findById(orderId);
+        if (oldOrder.isEmpty()){
+            throw new NotFoundException("User with id: " + orderId + " not found");
+        }
+        ShopOrder order = oldOrder.get();
+        order.setOrderStatus(newOrder.getOrderStatus());
         return this.orderRepository.save(order);
     }
 }
