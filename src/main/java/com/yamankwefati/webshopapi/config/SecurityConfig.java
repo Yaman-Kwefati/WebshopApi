@@ -1,5 +1,6 @@
 package com.yamankwefati.webshopapi.config;
 
+import com.yamankwefati.webshopapi.service.UserSecurity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,26 +19,31 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserSecurity userSecurity) throws Exception {
         http = http.cors().and().csrf().disable();
-        http
-                .authorizeHttpRequests()
-                //Users
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/users/all-users").hasAuthority("ADMIN")
-                .requestMatchers("/api/v1/users/{userId}").permitAll()
-                //Orders
-                .requestMatchers("/api/v1/orders/all-orders").hasAuthority("ADMIN")
-                .requestMatchers("/api/v1/orders/{orderId}").hasAnyAuthority("ADMIN", "CUSTOMER")
-                .requestMatchers("/api/v1/orders/new-order").hasAnyAuthority("ADMIN", "CUSTOMER")
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http.authorizeHttpRequests(
+                auth -> {
+                    try {
+                        auth
+                                //Users
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/users/all-users").hasAuthority("ADMIN")
+                                .requestMatchers("/api/v1/users/{userId}/**").access(userSecurity)
+                                //Orders
+                                .requestMatchers("/api/v1/orders/all-orders").hasAuthority("ADMIN")
+                                .requestMatchers("/api/v1/orders/{orderId}").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers("/api/v1/orders/new-order").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .anyRequest().authenticated()
+                                .and()
+                                .sessionManagement()
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                                .and()
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
         return http.build();
     }
 }
