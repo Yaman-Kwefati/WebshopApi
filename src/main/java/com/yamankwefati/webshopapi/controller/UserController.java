@@ -19,7 +19,8 @@ public class UserController {
     @Autowired
     private UserDAO userDAO;
 
-    @RequestMapping(method = RequestMethod.GET )
+    //Get all users
+    @RequestMapping(method = RequestMethod.GET, value = "/all-users")
     @ResponseBody
     ApiResponse<List<User>> getAllUsers(){
         try {
@@ -30,6 +31,7 @@ public class UserController {
         }
     }
 
+    //Get a user by id
     @RequestMapping(method = RequestMethod.GET, value = "/{userId}")
     @ResponseBody
     ApiResponse<Optional<User>> getUserById(@PathVariable Long userId) {
