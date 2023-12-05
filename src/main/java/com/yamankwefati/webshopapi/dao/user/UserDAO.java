@@ -23,7 +23,7 @@ public class UserDAO {
         this.userRepository.save(newUser);
     }
 
-    public Optional<User> getUserById(Long userId){
-        return Optional.of(this.userRepository.findById(userId).get());
+    public Optional<User> getUserById(Long userId) {
+        return this.userRepository.findById(userId);
     }
 }

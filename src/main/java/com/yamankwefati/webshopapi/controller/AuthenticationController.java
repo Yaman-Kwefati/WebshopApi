@@ -22,6 +22,7 @@ public class AuthenticationController {
     @Autowired
     private final AuthenticationService service;
 
+    //Register a new user
     @PostMapping("/register")
     public ApiResponse<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
@@ -29,6 +30,7 @@ public class AuthenticationController {
         return new ApiResponse<>(HttpStatus.ACCEPTED, service.register(request));
     }
 
+    //login a user
     @PostMapping("/authenticate")
     public ApiResponse<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
@@ -36,6 +38,7 @@ public class AuthenticationController {
         return new ApiResponse<>(HttpStatus.ACCEPTED, service.authenticate(request));
     }
 
+    //refresh jwt token
     @PostMapping("/refresh-token")
     public void refreshToken(
             HttpServletRequest request,

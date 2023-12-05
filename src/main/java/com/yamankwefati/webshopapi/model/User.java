@@ -35,7 +35,8 @@ public class User implements UserDetails {
     private String street;
     private String postalCode;
     @Enumerated(EnumType.STRING)
-    private Role userRol;
+    @Builder.Default
+    private Role userRol = Role.CUSTOMER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

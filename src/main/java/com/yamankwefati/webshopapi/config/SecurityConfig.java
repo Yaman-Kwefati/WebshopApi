@@ -22,8 +22,14 @@ public class SecurityConfig {
         http = http.cors().and().csrf().disable();
         http
                 .authorizeHttpRequests()
+                //Users
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/users").hasAnyAuthority("ADMIN")
+                .requestMatchers("/api/v1/users/all-users").hasAuthority("ADMIN")
+                .requestMatchers("/api/v1/users/{userId}").permitAll()
+                //Orders
+                .requestMatchers("/api/v1/orders/all-orders").hasAuthority("ADMIN")
+                .requestMatchers("/api/v1/orders/{orderId}").hasAnyAuthority("ADMIN", "CUSTOMER")
+                .requestMatchers("/api/v1/orders/new-order").hasAnyAuthority("ADMIN", "CUSTOMER")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
