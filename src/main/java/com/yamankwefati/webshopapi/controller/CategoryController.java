@@ -3,6 +3,7 @@ package com.yamankwefati.webshopapi.controller;
 import com.yamankwefati.webshopapi.dao.category.CategoryDAO;
 import com.yamankwefati.webshopapi.model.ApiResponse;
 import com.yamankwefati.webshopapi.model.Category;
+import com.yamankwefati.webshopapi.model.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,20 @@ public class CategoryController {
             return new ApiResponse<>(HttpStatus.ACCEPTED, "Category Deleted");
         } catch (Exception e) {
             return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Couldn't find Category");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/{categoryId}/addProduct")
+    @ResponseBody
+    public ApiResponse<String> addProductToCategory(
+            @PathVariable Long categoryId,
+            @RequestBody Long productId) {
+
+        try {
+            this.categoryDAO.addProductToCategory(categoryId, productId);
+            return new ApiResponse<>(HttpStatus.OK, "Product added to category successfully");
+        } catch (Exception e) {
+            return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.yamankwefati.webshopapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class Product {
     private String description;
     private Double price;
     private int stockQuantity;
-    @ManyToMany(mappedBy = "productList")
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "productList")
     private List<Category> categoryList;
 }

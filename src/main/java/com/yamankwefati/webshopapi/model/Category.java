@@ -20,8 +20,8 @@ public class Category {
     private Long categoryId;
     private String categoryName;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "ProductCategory",
-    joinColumns = @JoinColumn(name = "productId"),
-    inverseJoinColumns = @JoinColumn(name = "categoryId"))
+    @JoinTable(name = "product_category",
+    joinColumns = @JoinColumn(name = "product_id"),
+    inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Product> productList;
 }
