@@ -3,6 +3,7 @@ package com.yamankwefati.webshopapi.controller;
 import com.yamankwefati.webshopapi.dao.product.ProductDAO;
 import com.yamankwefati.webshopapi.model.ApiResponse;
 import com.yamankwefati.webshopapi.model.Product;
+import com.yamankwefati.webshopapi.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,19 @@ public class ProductController {
             return new ApiResponse<>(HttpStatus.ACCEPTED, newProduct);
         } catch (Exception e) {
             return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Couldn't add Product");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{productId}")
+    @ResponseBody
+    ApiResponse<Product> updateProduct(
+            @RequestBody Product updatedProduct,
+            @PathVariable Long productId) {
+        try {
+            Product product = this.productDAO.updateProduct(updatedProduct, productId);
+            return new ApiResponse<>(HttpStatus.ACCEPTED, product);
+        } catch (Exception e){
+            return new ApiResponse<>(HttpStatus.NOT_FOUND, "Product not found");
         }
     }
 
