@@ -34,7 +34,8 @@ public class OrderDAO {
         if (user.isEmpty()) {
             return Collections.emptyList();
         }
-        return this.orderRepository.getOrdersByUserId(user.get().getId());
+        User user1 = user.get();
+        return this.orderRepository.getOrdersByUserId(user1);
     }
 
     public ShopOrder saveNewOrder(ShopOrder shopOrder){
@@ -46,7 +47,7 @@ public class OrderDAO {
         return this.orderRepository.save(order);
     }
 
-    public ShopOrder updateOrder(ShopOrder newOrder, Long orderId) throws NotFoundException {
+    public ShopOrder updateOrderStatus(ShopOrder newOrder, Long orderId) throws NotFoundException {
         Optional<ShopOrder> oldOrder = this.orderRepository.findById(orderId);
         if (oldOrder.isEmpty()){
             throw new NotFoundException("User with id: " + orderId + " not found");

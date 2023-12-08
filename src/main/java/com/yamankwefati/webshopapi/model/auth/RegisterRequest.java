@@ -22,5 +22,6 @@ public class RegisterRequest {
     private String street;
     private String postalCode;
     @Enumerated(EnumType.STRING)
-    private Role userRol;
+    @Builder.Default
+    private Role userRol = Role.CUSTOMER;
 }

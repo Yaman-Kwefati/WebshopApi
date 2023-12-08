@@ -63,15 +63,26 @@ public class OrderController {
     //Update an order
     @RequestMapping(method = RequestMethod.PUT, value = "/{orderId}")
     @ResponseBody
-    public ApiResponse<ShopOrder> updateOrder(
+    public ApiResponse<ShopOrder> updateOrderStatus(
             @RequestBody ShopOrder shopOrderRequest,
             @PathVariable Long orderId
     ){
         try {
-            ShopOrder order = this.orderDAO.updateOrder(shopOrderRequest, orderId);
+            ShopOrder order = this.orderDAO.updateOrderStatus(shopOrderRequest, orderId);
             return new ApiResponse<>(HttpStatus.ACCEPTED, order);
         } catch (Exception e) {
             return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Couldn't place order.");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/user/{email}")
+    @ResponseBody
+    ApiResponse<List<ShopOrder>> getAllUserOrders(@PathVariable String email) {
+        try {
+            List<ShopOrder> orders = this.orderDAO.getAllUserOrders(email);
+            return new ApiResponse<>(HttpStatus.ACCEPTED, orders);
+        } catch (Exception e){
+            return new ApiResponse<>(HttpStatus.NOT_FOUND, "Orders not found");
         }
     }
 }
