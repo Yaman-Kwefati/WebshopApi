@@ -5,10 +5,7 @@ import com.yamankwefati.webshopapi.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -39,6 +36,20 @@ public class UserController {
 
         try {
             Optional<User> user = this.userDAO.getUserById(userId);
+            return new ApiResponse<>(HttpStatus.ACCEPTED, user);
+        } catch (Exception e){
+            return new ApiResponse<>(HttpStatus.NOT_FOUND, "User not found");
+        }
+    }
+
+    //Update a user
+    @RequestMapping(method = RequestMethod.PUT, value = "/{userId}")
+    @ResponseBody
+    ApiResponse<User> updateUser(
+            @RequestBody User updatedUser,
+            @PathVariable Long userId) {
+        try {
+            User user = this.userDAO.updateUser(updatedUser, userId);
             return new ApiResponse<>(HttpStatus.ACCEPTED, user);
         } catch (Exception e){
             return new ApiResponse<>(HttpStatus.NOT_FOUND, "User not found");
