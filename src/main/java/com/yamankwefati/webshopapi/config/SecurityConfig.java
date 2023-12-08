@@ -31,14 +31,19 @@ public class SecurityConfig {
                         auth
                                 //Users
                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/v1/users/all-users").hasAuthority("ADMIN")
-                                .requestMatchers("/api/v1/users/{userId}/**").access(userSecurity)
+                                .requestMatchers(HttpMethod.GET,"/api/v1/users/all-users").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET,"/api/v1/users/{userId}/**").access(userSecurity)
                                 //Orders
-                                .requestMatchers("/api/v1/orders/all-orders").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET,"/api/v1/orders/all-orders").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/orders/{orderId}").access(orderSecurity)
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/orders/{orderId}").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/v1/orders/user/{email}").access(orderUserSecurity)
-                                .requestMatchers("/api/v1/orders/new-order").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.POST,"/api/v1/orders/new-order").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                //Categories
+                                .requestMatchers(HttpMethod.GET,"/api/v1/categories/all-categories").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/v1/categories/{categoryName}").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/v1/categories/new-category").hasAuthority("ADMIN")
+                                .requestMatchers( HttpMethod.DELETE,"/api/v1/categories/{categoryName}").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                                 .and()
                                 .sessionManagement()
