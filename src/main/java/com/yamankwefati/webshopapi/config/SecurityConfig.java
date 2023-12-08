@@ -50,6 +50,12 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,"/api/v1/products/new-product").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT,"/api/v1/products/{productId}").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE,"/api/v1/products/{productId}").hasAuthority("ADMIN")
+                                //OrderItems
+                                .requestMatchers(HttpMethod.GET,"/api/v1/order-items/all").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET,"/api/v1/order-items/{orderItemId}").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.GET,"/api/v1/order-items/by-order/{orderId}").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.POST,"/api/v1/order-items/new-order-item").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                .requestMatchers(HttpMethod.PUT,"/api/v1/order-items/{orderItemId}").hasAnyAuthority("ADMIN", "CUSTOMER")
                                 .anyRequest().authenticated()
                                 .and()
                                 .sessionManagement()
