@@ -12,6 +12,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/v1/categories")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
     private final CategoryDAO categoryDAO;

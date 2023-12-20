@@ -30,6 +30,7 @@ public class SecurityConfig {
                     try {
                         auth
                                 //Users
+                                .requestMatchers("/api/v1/auth/refresh-token").permitAll()
                                 .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/api/v1/users/all-users").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.GET,"/api/v1/users/{userId}/**").access(userSecurity)
