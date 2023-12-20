@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/api/v1/users")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
     private UserDAO userDAO;
