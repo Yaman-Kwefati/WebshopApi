@@ -39,7 +39,7 @@ public class OrderItemDAO {
     }
 
     public OrderItem saveNewOrderItem(OrderItem orderItem) throws NotFoundException {
-        Optional<ShopOrder> shopOrder = this.orderRepository.findById(orderItem.getShopOrderId().getOrderId());
+        Optional<ShopOrder> shopOrder = this.orderRepository.findById(orderItem.getShopOrderId().getId());
         if (shopOrder.isEmpty()) {
             throw new NotFoundException("ShopOrder not found");
         }

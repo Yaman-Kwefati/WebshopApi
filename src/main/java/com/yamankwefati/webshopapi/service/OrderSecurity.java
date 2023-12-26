@@ -31,7 +31,7 @@ public class OrderSecurity implements AuthorizationManager<RequestAuthorizationC
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             Long orderUserId = getOrderUserId(orderId);
-            return user.getId().equals(orderUserId) || user.getUserRol().equals(Role.ADMIN);
+            return user.getId().equals(orderUserId) || user.getUserRole().equals(Role.ADMIN);
         }
         return false;
     }

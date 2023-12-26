@@ -1,6 +1,5 @@
 package com.yamankwefati.webshopapi.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,13 +17,14 @@ import java.time.LocalDate;
 public class ShopOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderId;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Status orderStatus = Status.PLACED;
-    private LocalDate orderDate;
+    @Builder.Default
+    private LocalDate orderDate = LocalDate.now();
     private Double totalAmount;
 }

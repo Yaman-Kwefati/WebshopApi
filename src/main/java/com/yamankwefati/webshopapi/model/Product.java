@@ -18,10 +18,12 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long id;
     private String name;
     private String description;
     private Double price;
+    @ElementCollection
+    private List<String> images;
     private int stockQuantity;
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "productList")
