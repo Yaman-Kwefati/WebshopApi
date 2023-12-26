@@ -48,7 +48,7 @@ public class AuthenticationService {
                 .city(request.getCity())
                 .street(request.getStreet())
                 .postalCode(request.getPostalCode())
-                .userRol(request.getUserRol())
+                .userRole(request.getUserRol())
                 .build();
         userRepository.save(user);
 

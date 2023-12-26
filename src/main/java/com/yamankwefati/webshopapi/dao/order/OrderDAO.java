@@ -40,9 +40,8 @@ public class OrderDAO {
 
     public ShopOrder saveNewOrder(ShopOrder shopOrder){
         var order = ShopOrder.builder()
-                .orderDate(shopOrder.getOrderDate())
-                .totalAmount(shopOrder.getTotalAmount())
                 .userId(shopOrder.getUserId())
+                .totalAmount(shopOrder.getTotalAmount())
                 .build();
         return this.orderRepository.save(order);
     }

@@ -1,6 +1,5 @@
 package com.yamankwefati.webshopapi.service;
 
-import com.yamankwefati.webshopapi.dao.order.OrderRepository;
 import com.yamankwefati.webshopapi.dao.user.UserRepository;
 import com.yamankwefati.webshopapi.model.Role;
 import com.yamankwefati.webshopapi.model.User;
@@ -32,7 +31,7 @@ public class OrderUserSecurity implements AuthorizationManager<RequestAuthorizat
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             Long orderUserId = getOrderUserId(orderEmail);
-            return user.getId().equals(orderUserId) || user.getUserRol().equals(Role.ADMIN);
+            return user.getId().equals(orderUserId) || user.getUserRole().equals(Role.ADMIN);
         }
         return false;
     }
