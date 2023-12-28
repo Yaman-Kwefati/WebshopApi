@@ -21,9 +21,8 @@ public class UserSecurity implements AuthorizationManager<RequestAuthorizationCo
     }
 
     public boolean hasUserId(Authentication authentication, Long userId) {
-        Optional<User> userOptional = (Optional<User>) authentication.getPrincipal();
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        User user = (User) authentication.getPrincipal();
+        if (user != null) {
             return user.getId().equals(userId) || user.getUserRole().equals(Role.ADMIN);
         }
         return false;

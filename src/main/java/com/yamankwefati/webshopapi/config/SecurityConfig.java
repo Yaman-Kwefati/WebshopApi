@@ -57,6 +57,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,"/api/v1/order-items/by-order/{orderId}").hasAnyAuthority("ADMIN", "CUSTOMER")
                                 .requestMatchers(HttpMethod.POST,"/api/v1/order-items/new-order-item").hasAnyAuthority("ADMIN", "CUSTOMER")
                                 .requestMatchers(HttpMethod.PUT,"/api/v1/order-items/{orderItemId}").hasAnyAuthority("ADMIN", "CUSTOMER")
+                                //pictures
+                                .requestMatchers(HttpMethod.GET,"/api/v1/files/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/v1/files/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()
                                 .and()
                                 .sessionManagement()
