@@ -39,6 +39,7 @@ public class User implements UserDetails {
     private Role userRole = Role.CUSTOMER;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(userRole.name()));
     }

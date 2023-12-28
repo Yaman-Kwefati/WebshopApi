@@ -27,14 +27,14 @@ public class OrderSecurity implements AuthorizationManager<RequestAuthorizationC
     }
 
     public boolean hasUserId(Authentication authentication, Long orderId) {
-        Optional<User> userOptional = (Optional<User>) authentication.getPrincipal();
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        User user = (User) authentication.getPrincipal();
+        if (user != null) {
             Long orderUserId = getOrderUserId(orderId);
             return user.getId().equals(orderUserId) || user.getUserRole().equals(Role.ADMIN);
         }
         return false;
     }
+
 
     private Long getOrderUserId(Long orderId){
         return this.orderRepository.findById(orderId).get().getUserId().getId();

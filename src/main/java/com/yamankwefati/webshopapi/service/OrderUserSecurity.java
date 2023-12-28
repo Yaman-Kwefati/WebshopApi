@@ -27,9 +27,8 @@ public class OrderUserSecurity implements AuthorizationManager<RequestAuthorizat
     }
 
     public boolean hasUserId(Authentication authentication, String orderEmail) {
-        Optional<User> userOptional = (Optional<User>) authentication.getPrincipal();
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+        User user = (User) authentication.getPrincipal();
+        if (user != null) {
             Long orderUserId = getOrderUserId(orderEmail);
             return user.getId().equals(orderUserId) || user.getUserRole().equals(Role.ADMIN);
         }
@@ -37,7 +36,6 @@ public class OrderUserSecurity implements AuthorizationManager<RequestAuthorizat
     }
 
     private Long getOrderUserId(String orderEmail){
-        // Assuming you have a method in OrderRepository to find by email
         return this.userRepository.findByEmail(orderEmail).get().getId();
     }
 }

@@ -3,7 +3,7 @@ package com.yamankwefati.webshopapi.model;
 public enum Status {
     PLACED,
     SHIPPED,
-    DELEIVERED,
+    DELIVERED,
     DECLINED,
     CANCELLED
 }
