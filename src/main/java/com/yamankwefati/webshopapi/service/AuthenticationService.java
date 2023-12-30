@@ -125,8 +125,8 @@ public class AuthenticationService {
                 var newAccessToken = jwtService.generateToken(userDetails);
                 var newRefreshToken = jwtService.generateRefreshToken(userDetails);
 
-                setTokenCookie(response, "accessToken", newAccessToken);
-                setTokenCookie(response, "refreshToken", newRefreshToken);
+                setTokenCookie(response, "accessToken", newAccessToken, 60 * 60 * 24);
+                setTokenCookie(response, "refreshToken", newRefreshToken, 60 * 60 * 24 * 7);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
@@ -146,14 +146,29 @@ public class AuthenticationService {
         return null;
     }
 
-    private void setTokenCookie(HttpServletResponse response, String name, String token) {
+    private void setTokenCookie(HttpServletResponse response, String name, String token, int maxAgeSecons) {
         ResponseCookie cookie = ResponseCookie.from(name, token)
                 .httpOnly(true)
                 .secure(false) // set to true in production
                 .path("/")
+                .maxAge(maxAgeSecons)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
+    public void logoutUser(HttpServletResponse response){
+        Cookie accessTokenCookie = new Cookie("accessToken", null);
+        accessTokenCookie.setMaxAge(0);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+        refreshTokenCookie.setMaxAge(0);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+
+        response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
+    }
 
 }

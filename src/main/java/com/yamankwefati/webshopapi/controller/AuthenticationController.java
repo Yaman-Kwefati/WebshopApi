@@ -5,6 +5,7 @@ import com.yamankwefati.webshopapi.model.auth.AuthenticationRequest;
 import com.yamankwefati.webshopapi.model.auth.AuthenticationResponse;
 import com.yamankwefati.webshopapi.model.auth.RegisterRequest;
 import com.yamankwefati.webshopapi.service.AuthenticationService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -49,4 +50,11 @@ public class AuthenticationController {
     ) throws IOException {
         service.refreshToken(request, response);
     }
+
+    @PostMapping("/logout")
+    public ApiResponse<?> logout(HttpServletResponse response) {
+        service.logoutUser(response);
+        return new ApiResponse<>(HttpStatus.OK, "Done");
+    }
+
 }
