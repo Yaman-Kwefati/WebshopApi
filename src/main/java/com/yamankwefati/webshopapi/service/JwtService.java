@@ -2,6 +2,7 @@ package com.yamankwefati.webshopapi.service;
 
 import com.yamankwefati.webshopapi.model.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -70,6 +71,15 @@ public class JwtService {
     public boolean isTokenValid(String token, Optional<User> userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.get().getUsername())) && !isTokenExpired(token);
+    }
+
+    public boolean isRefreshTokenValid(String token) {
+        try {
+            final Claims claims = extractAllClaims(token);
+            return !claims.getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {

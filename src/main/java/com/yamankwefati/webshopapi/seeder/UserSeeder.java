@@ -15,7 +15,7 @@ public class UserSeeder {
     private UserDAO userDAO;
     private final PasswordEncoder passwordEncoder;
     public void seed(){
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             User newUser = User.builder()
                     .firstname("User" + i + "firstname")
                     .lastname("User" + i + "lastname")
@@ -25,7 +25,6 @@ public class UserSeeder {
                     .city("Bodegraven")
                     .street("Koninginneweg 124")
                     .postalCode("2411XV")
-                    .userRol(Role.CUSTOMER)
                     .build();
 
 
@@ -40,7 +39,7 @@ public class UserSeeder {
                 .city("Bodegraven")
                 .street("Koninginneweg 124")
                 .postalCode("2411XV")
-                .userRol(Role.ADMIN)
+                .userRole(Role.ADMIN)
                 .build();
         this.userDAO.saveNewUser(newUser);
     }

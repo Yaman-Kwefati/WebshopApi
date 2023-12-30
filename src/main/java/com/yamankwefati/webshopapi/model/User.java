@@ -35,11 +35,13 @@ public class User implements UserDetails {
     private String street;
     private String postalCode;
     @Enumerated(EnumType.STRING)
-    private Role userRol;
+    @Builder.Default
+    private Role userRole = Role.CUSTOMER;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userRol.name()));
+        return List.of(new SimpleGrantedAuthority(userRole.name()));
     }
 
     @Override

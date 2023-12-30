@@ -17,25 +17,31 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
 
     @Autowired
     private final AuthenticationService service;
 
+    //Register a new user
     @PostMapping("/register")
     public ApiResponse<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody RegisterRequest request,
+            HttpServletResponse response
     ){
-        return new ApiResponse<>(HttpStatus.ACCEPTED, service.register(request));
+        return new ApiResponse<>(HttpStatus.ACCEPTED, service.register(request, response));
     }
 
+    //login a user
     @PostMapping("/authenticate")
     public ApiResponse<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+            @RequestBody AuthenticationRequest request,
+            HttpServletResponse response
     ){
-        return new ApiResponse<>(HttpStatus.ACCEPTED, service.authenticate(request));
+        return new ApiResponse<>(HttpStatus.ACCEPTED, service.authenticate(request, response));
     }
 
+    //refresh jwt token
     @PostMapping("/refresh-token")
     public void refreshToken(
             HttpServletRequest request,
