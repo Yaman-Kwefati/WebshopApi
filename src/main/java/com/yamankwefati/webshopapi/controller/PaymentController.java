@@ -20,13 +20,12 @@ public class PaymentController {
 @PostMapping("/create-checkout-session")
 public ApiResponse<String> createCheckoutSession(@RequestBody PaymentRequest paymentRequest) {
     try {
-        String DOMAIN = "http://localhost:4200";
         SessionCreateParams.Builder sessionBuilder = SessionCreateParams.builder()
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.IDEAL)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(DOMAIN + "/success")
-                .setCancelUrl(DOMAIN + "/cancel");
+                .setSuccessUrl("http://159.223.236.93/success")
+                .setCancelUrl("http://159.223.236.93/cancel");
 
         for (CartItem item : paymentRequest.getItems()) {
             sessionBuilder.addLineItem(
