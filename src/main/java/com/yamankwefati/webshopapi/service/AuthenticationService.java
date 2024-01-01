@@ -1,7 +1,12 @@
 package com.yamankwefati.webshopapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yamankwefati.webshopapi.dao.confirmationToken.ConfirmationTokenDAO;
+import com.yamankwefati.webshopapi.dao.email.EmailDAO;
+import com.yamankwefati.webshopapi.dao.email.EmailSender;
+import com.yamankwefati.webshopapi.dao.user.UserDAO;
 import com.yamankwefati.webshopapi.dao.user.UserRepository;
+import com.yamankwefati.webshopapi.model.ConfirmationToken;
 import com.yamankwefati.webshopapi.model.auth.AuthenticationRequest;
 import com.yamankwefati.webshopapi.model.auth.AuthenticationResponse;
 import com.yamankwefati.webshopapi.model.auth.RegisterRequest;
@@ -9,6 +14,7 @@ import com.yamankwefati.webshopapi.model.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -18,9 +24,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +39,14 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ConfirmationTokenDAO confirmationTokenDAO;
+    private final EmailSender emailSender;
 
     public AuthenticationResponse register(RegisterRequest request, HttpServletResponse response) {
         // Check if the user already exists
         Optional<User> existingUser = this.userRepository.findByEmail(request.getEmail());
         if (existingUser.isPresent()){
-            throw new RuntimeException("User Already exist");
+            throw new IllegalStateException("User Already exist");
         }
 
         // Create a new user
@@ -50,11 +61,26 @@ public class AuthenticationService {
                 .postalCode(request.getPostalCode())
                 .userRole(request.getUserRol())
                 .build();
+
         userRepository.save(user);
+
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = ConfirmationToken.builder()
+                .token(token)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .appUser(user)
+                .build();
+
+        this.confirmationTokenDAO.saveConfirmationToken(confirmationToken);
+        String link = "http://localhost:8080/api/v1/auth/register/confirm?token="+token+"&userId="+user.getId();
+        emailSender.send(request.getEmail(), buildEmail(request.getLastname(), link));
 
         // Generate JWT tokens
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+
+
 
         // Set tokens as HTTP-only cookies in the response
         ResponseCookie jwtCookie = ResponseCookie.from("accessToken", jwtToken)
@@ -171,4 +197,15 @@ public class AuthenticationService {
         response.addCookie(refreshTokenCookie);
     }
 
+    private String buildEmail(String userName, String link){
+        return "\n" +
+                "Hello "+userName+"\n" +
+                "\n" +
+                "Please click on the following link to confirm you registration for Our Company\n" +
+                ""+link+"\n" +
+                "\n" +
+                "See you there!\n" +
+                "\n" +
+                "Best regards, Our Company team";
+    }
 }
