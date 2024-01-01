@@ -44,4 +44,15 @@ public class UserDAO {
         user.setPostalCode(updatedUser.getPostalCode());
         return this.userRepository.save(user);
     }
+
+    @Transactional
+    public void enableUser(Long userId) throws NotFoundException {
+        Optional<User> userOptional = this.userRepository.findById(userId);
+        if (userOptional.isEmpty()){
+            throw new NotFoundException("User with id: " + userId + " not found");
+        }
+        User user = userOptional.get();
+        user.setEnabled(true);
+        this.userRepository.save(user);
+    }
 }
