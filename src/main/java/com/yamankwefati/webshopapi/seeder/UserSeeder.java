@@ -33,14 +33,16 @@ public class UserSeeder {
         User newUser = User.builder()
                 .firstname("YamanAdmin")
                 .lastname("KwefatiAdmin")
-                .email("Admin@gmail.com")
+                .email("yamankwefati@icloud.com")
                 .password(passwordEncoder.encode("testPassword"))
                 .phoneNumber("0625112776")
                 .city("Bodegraven")
                 .street("Koninginneweg 124")
                 .postalCode("2411XV")
                 .userRole(Role.ADMIN)
+                .enabled(true)
                 .build();
+        newUser.isEnabled();
         this.userDAO.saveNewUser(newUser);
     }
 }
