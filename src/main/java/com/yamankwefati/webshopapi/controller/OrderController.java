@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/api/v1/orders")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     @Autowired
@@ -47,19 +47,19 @@ public class OrderController {
         }
     }
 
-    //Place a new order
-    @RequestMapping(method = RequestMethod.POST, value = "/new-order")
-    @ResponseBody
-    public ApiResponse<ShopOrder> placeNewOrder(
-            @RequestBody ShopOrder shopOrderRequest
-    ){
-        try {
-            ShopOrder order = this.orderDAO.saveNewOrder(shopOrderRequest);
-            return new ApiResponse<>(HttpStatus.ACCEPTED, order);
-        } catch (Exception e) {
-            return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Couldn't place order.");
-        }
-    }
+//    //Place a new order
+//    @RequestMapping(method = RequestMethod.POST, value = "/new-order")
+//    @ResponseBody
+//    public ApiResponse<ShopOrder> placeNewOrder(
+//            @RequestBody ShopOrder shopOrderRequest
+//    ){
+//        try {
+//            ShopOrder order = this.orderDAO.saveNewOrder(shopOrderRequest);
+//            return new ApiResponse<>(HttpStatus.ACCEPTED, order);
+//        } catch (Exception e) {
+//            return new ApiResponse<>(HttpStatus.BAD_REQUEST, "Couldn't place order.");
+//        }
+//    }
 
     //Update an order
     @RequestMapping(method = RequestMethod.PUT, value = "/{orderId}")

@@ -40,16 +40,14 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ConfirmationTokenDAO confirmationTokenDAO;
-    private final EmailSender emailSender;
+    private final EmailDAO emailDAO;
 
     public AuthenticationResponse register(RegisterRequest request, HttpServletResponse response) {
-        // Check if the user already exists
         Optional<User> existingUser = this.userRepository.findByEmail(request.getEmail());
         if (existingUser.isPresent()){
             throw new IllegalStateException("User Already exist");
         }
 
-        // Create a new user
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -74,31 +72,30 @@ public class AuthenticationService {
 
         this.confirmationTokenDAO.saveConfirmationToken(confirmationToken);
         String link = "http://localhost:8080/api/v1/auth/register/confirm?token="+token+"&userId="+user.getId();
-        emailSender.send(request.getEmail(), buildEmail(request.getLastname(), link));
+        this.emailDAO.send(request.getEmail(), buildEmail(request.getLastname(), link), "Confirm Your Email");
 
-        // Generate JWT tokens
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
 
 
-        // Set tokens as HTTP-only cookies in the response
         ResponseCookie jwtCookie = ResponseCookie.from("accessToken", jwtToken)
                 .httpOnly(true)
-                .secure(false) // set to true in production
+                .secure(true) // set to true in production
                 .path("/")
+                .sameSite("None")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
-                .secure(false) // same as above
+                .secure(true) // same as above
                 .path("/")
+                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", jwtCookie.toString());
         response.addHeader("Set-Cookie", refreshCookie.toString());
 
-        // Return the response without the tokens in the body
         return AuthenticationResponse.builder()
                 .user(user)
                 .build();
@@ -117,22 +114,25 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         ResponseCookie jwtCookie = ResponseCookie.from("accessToken", jwtToken)
                 .httpOnly(true)
-                .secure(false) // should be true in production
+                .secure(true) // should be true in production
                 .path("/")
+                .sameSite("None")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken",  refreshToken)
                 .httpOnly(true)
-                .secure(false) // same as above
+                .secure(true) // same as above
                 .path("/")
+                .sameSite("None")
                 .build();
+        System.out.println(jwtCookie);
+        System.out.println(refreshCookie);
 
         response.addHeader("Set-Cookie", jwtCookie.toString());
         response.addHeader("Set-Cookie", refreshCookie.toString());
 
         return AuthenticationResponse.builder()
                 .user(user)
-                // remove accessToken and refreshToken from the response
                 .build();
     }
 
@@ -172,11 +172,12 @@ public class AuthenticationService {
         return null;
     }
 
-    private void setTokenCookie(HttpServletResponse response, String name, String token, int maxAgeSecons) {
+    private void setTokenCookie(HttpServletResponse response, String name, String token, long maxAgeSecons) {
         ResponseCookie cookie = ResponseCookie.from(name, token)
                 .httpOnly(true)
-                .secure(false) // set to true in production
+                .secure(true) // set to true in production
                 .path("/")
+                .sameSite("None")
                 .maxAge(maxAgeSecons)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());

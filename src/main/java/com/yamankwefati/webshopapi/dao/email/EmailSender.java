@@ -1,5 +1,5 @@
 package com.yamankwefati.webshopapi.dao.email;
 
 public interface EmailSender {
-    void send(String to, String email);
+    void send(String to, String email, String subject);
 }
