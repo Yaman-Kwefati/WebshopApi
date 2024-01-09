@@ -1,24 +1,33 @@
 package com.yamankwefati.webshopapi.dao.order;
 
+import com.yamankwefati.webshopapi.dao.email.EmailDAO;
+import com.yamankwefati.webshopapi.dao.orderItem.OrderItemDAO;
 import com.yamankwefati.webshopapi.dao.user.UserRepository;
+import com.yamankwefati.webshopapi.model.OrderItem;
 import com.yamankwefati.webshopapi.model.ShopOrder;
 import com.yamankwefati.webshopapi.model.User;
 import javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class OrderDAO {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final OrderItemDAO orderItemDAO;
+    private final EmailDAO emailDAO;
 
-    public OrderDAO(OrderRepository orderRepository, UserRepository userRepository) {
+    public OrderDAO(OrderRepository orderRepository, UserRepository userRepository, OrderItemDAO orderItemDAO,
+                    EmailDAO emailDAO) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.orderItemDAO = orderItemDAO;
+        this.emailDAO = emailDAO;
     }
 
     public List<ShopOrder> getAllOrders(){
@@ -55,4 +64,16 @@ public class OrderDAO {
         order.setOrderStatus(newOrder.getOrderStatus());
         return this.orderRepository.save(order);
     }
+
+    public void sendOrderConfirmationEmail(ShopOrder order) {
+        Map<String, Object> variables = new HashMap<>();
+        List<OrderItem> orderItems = this.orderItemDAO.getOrderItemsByOrderId(order.getId());
+        variables.put("user", order.getUserId());
+        variables.put("order", order);
+        variables.put("orderItems", orderItems);
+
+        String content = this.emailDAO.buildOrderEmail("order-confirmation", variables);
+        this.emailDAO.sendOrderConfirmationEmail(order.getUserId().getEmail(), content, "Order Confirmation");
+    }
+
 }
