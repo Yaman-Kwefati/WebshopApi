@@ -71,7 +71,7 @@ public class AuthenticationService {
                 .build();
 
         this.confirmationTokenDAO.saveConfirmationToken(confirmationToken);
-        String link = "http://localhost:8080/api/v1/auth/register/confirm?token="+token+"&userId="+user.getId();
+        String link = "https://yaman-g.nl/api/v1/auth/register/confirm?token="+token+"&userId="+user.getId();
         this.emailDAO.send(request.getEmail(), buildEmail(request.getLastname(), link), "Confirm Your Email");
 
         var jwtToken = jwtService.generateToken(user);
@@ -83,14 +83,14 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // set to true in production
                 .path("/")
-                .sameSite("None")
+//                .sameSite("None")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true) // same as above
                 .path("/")
-                .sameSite("None")
+//                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", jwtCookie.toString());
@@ -116,14 +116,14 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // should be true in production
                 .path("/")
-                .sameSite("None")
+//                .sameSite("None")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken",  refreshToken)
                 .httpOnly(true)
                 .secure(true) // same as above
                 .path("/")
-                .sameSite("None")
+//                .sameSite("None")
                 .build();
         System.out.println(jwtCookie);
         System.out.println(refreshCookie);
@@ -177,7 +177,7 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // set to true in production
                 .path("/")
-                .sameSite("None")
+//                .sameSite("None")
                 .maxAge(maxAgeSecons)
                 .build();
         response.addHeader("Set-Cookie", cookie.toString());
@@ -200,7 +200,7 @@ public class AuthenticationService {
 
     private String buildEmail(String userName, String link){
         return "\n" +
-                "Hello "+userName+"\n" +
+                "Hello "+userName+",\n" +
                 "\n" +
                 "Please click on the following link to confirm you registration for Our Company\n" +
                 ""+link+"\n" +

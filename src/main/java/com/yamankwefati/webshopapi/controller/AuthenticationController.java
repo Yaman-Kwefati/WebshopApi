@@ -28,7 +28,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     @Autowired
@@ -88,9 +87,9 @@ public class AuthenticationController {
         String token = UUID.randomUUID().toString();
         this.passwordResetTokenDAO.createPasswordResetTokenForUser(user.get(), token);
 
-        String link = "http://159.223.236.93/reset-password?token="+token;
+        String link = "https://yaman-g.nl/reset-password?token="+token;
         emailDAO.send(userEmail, passwordResetTokenDAO.buildEmail(user.get().getLastname(), link), "Password Change Request");
-        return new ApiResponse<>(HttpStatus.OK, "Email sent!");
+        return new ApiResponse<>(HttpStatus.OK, "Email sent! Please go back to Our website");
     }
 
     @GetMapping("/changePassword")
