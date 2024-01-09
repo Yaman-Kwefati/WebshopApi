@@ -45,10 +45,10 @@ public class PaymentController {
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                     .putMetadata("cartItems", cartItemsJson)
-//                .setSuccessUrl("http://159.223.236.93/success")
-//                .setCancelUrl("http://159.223.236.93/cancel");
-                .setSuccessUrl("https://e0b9-84-25-165-69.ngrok-free.app/success")
-                .setCancelUrl("https://e0b9-84-25-165-69.ngrok-free.app/cancel");
+                .setSuccessUrl("https://yaman-g.nl/success")
+                .setCancelUrl("https://yaman-g.nl/cancel");
+//                .setSuccessUrl("https://430b-2a02-a445-1c3-0-e0ba-c652-bcfb-f09a.ngrok-free.app/success")
+//                .setCancelUrl("https://430b-2a02-a445-1c3-0-e0ba-c652-bcfb-f09a.ngrok-free.app/cancel");
 
 
             for (CartItem item : paymentRequest.getItems()) {

@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/api/v1/orders")
-@CrossOrigin(origins = "*")
 public class OrderController {
 
     @Autowired

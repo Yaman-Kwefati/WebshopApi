@@ -12,7 +12,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/v1/products")
-@CrossOrigin(origins = "*")
 public class ProductController {
     private final ProductDAO productDAO;
 
