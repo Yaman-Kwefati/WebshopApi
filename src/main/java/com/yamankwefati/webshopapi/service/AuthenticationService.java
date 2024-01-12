@@ -83,6 +83,7 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // set to true in production
                 .path("/")
+                .maxAge(60 * 60 * 24 * 7)
 //                .sameSite("None")
                 .build();
 
@@ -90,6 +91,7 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // same as above
                 .path("/")
+                .maxAge(60 * 60 * 24 * 7)
 //                .sameSite("None")
                 .build();
 
@@ -116,6 +118,7 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // should be true in production
                 .path("/")
+                .maxAge(60 * 60 * 24 * 7)
 //                .sameSite("None")
                 .build();
 
@@ -123,6 +126,7 @@ public class AuthenticationService {
                 .httpOnly(true)
                 .secure(true) // same as above
                 .path("/")
+                .maxAge(60 * 60 * 24 * 7)
 //                .sameSite("None")
                 .build();
         System.out.println(jwtCookie);
