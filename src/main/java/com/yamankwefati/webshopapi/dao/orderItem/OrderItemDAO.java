@@ -1,8 +1,10 @@
 package com.yamankwefati.webshopapi.dao.orderItem;
 
 import com.yamankwefati.webshopapi.dao.order.OrderRepository;
+import com.yamankwefati.webshopapi.dao.product.ProductDAO;
 import com.yamankwefati.webshopapi.dao.product.ProductRepository;
 import com.yamankwefati.webshopapi.model.OrderItem;
+import com.yamankwefati.webshopapi.model.Product;
 import com.yamankwefati.webshopapi.model.ShopOrder;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Component;
@@ -46,11 +48,13 @@ public class OrderItemDAO {
 
         orderItem.setShopOrderId(shopOrder.get());
 
-        // Ensure that the product with the given productId exists before saving
-        if (!productRepository.existsById((long) orderItem.getProductId())) {
+        Optional<Product> product = this.productRepository.findById(Long.valueOf(orderItem.getProductId()));
+
+        if (product.isEmpty()) {
             throw new NotFoundException("Product not found");
         }
-
+        product.get().setStockQuantity(product.get().getStockQuantity() - orderItem.getQuantity());
+        
         return this.orderItemRepository.save(orderItem);
     }
 

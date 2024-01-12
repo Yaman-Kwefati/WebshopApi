@@ -37,6 +37,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Role userRole = Role.CUSTOMER;
+    @JsonIgnore
+    private boolean enabled = false;
 
     @Override
     @JsonIgnore
@@ -77,6 +79,6 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 }
