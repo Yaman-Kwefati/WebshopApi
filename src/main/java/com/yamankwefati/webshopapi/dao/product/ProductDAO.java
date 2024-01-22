@@ -20,6 +20,10 @@ public class ProductDAO {
         return this.productRepository.findAll();
     }
 
+    public Optional<Product> getProductById(Long productId){
+        return this.productRepository.findById(productId);
+    }
+
     public Product getProductByName(String productName) {
         return productRepository.getByName(productName);
     }

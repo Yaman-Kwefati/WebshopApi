@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.exception.StripeException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
+import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
 import com.yamankwefati.webshopapi.dao.order.OrderDAO;
 import com.yamankwefati.webshopapi.dao.orderItem.OrderItemDAO;
@@ -45,13 +47,14 @@ public class PaymentController {
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                     .putMetadata("cartItems", cartItemsJson)
-                .setSuccessUrl("https://yaman-g.nl/success")
-                .setCancelUrl("https://yaman-g.nl/cancel");
+                .setSuccessUrl("https://cholietalie.nl/success")
+                .setCancelUrl("https://cholietalie.nl/cancel");
 //                .setSuccessUrl("https://430b-2a02-a445-1c3-0-e0ba-c652-bcfb-f09a.ngrok-free.app/success")
 //                .setCancelUrl("https://430b-2a02-a445-1c3-0-e0ba-c652-bcfb-f09a.ngrok-free.app/cancel");
 
 
             for (CartItem item : paymentRequest.getItems()) {
+                //TODO: fetch product
                 sessionBuilder.addLineItem(
                     SessionCreateParams.LineItem.builder()
                             .setQuantity(item.getQuantity())
@@ -82,7 +85,13 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ApiResponse<String> handleStripeWebhook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
+        String webhookSecret = System.getenv("stripe.webhook.secret");
+        if (webhookSecret == null || webhookSecret.isEmpty()) {
+            // Handle the error appropriately if the secret is not set
+            return new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Webhook Secret is not set");
+        }
         try {
+            Event event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(payload);
 
