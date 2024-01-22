@@ -2,8 +2,10 @@ package com.yamankwefati.webshopapi.dao.order;
 
 import com.yamankwefati.webshopapi.dao.email.EmailDAO;
 import com.yamankwefati.webshopapi.dao.orderItem.OrderItemDAO;
+import com.yamankwefati.webshopapi.dao.product.ProductDAO;
 import com.yamankwefati.webshopapi.dao.user.UserRepository;
 import com.yamankwefati.webshopapi.model.OrderItem;
+import com.yamankwefati.webshopapi.model.Product;
 import com.yamankwefati.webshopapi.model.ShopOrder;
 import com.yamankwefati.webshopapi.model.User;
 import javassist.NotFoundException;
@@ -21,13 +23,15 @@ public class OrderDAO {
     private final UserRepository userRepository;
     private final OrderItemDAO orderItemDAO;
     private final EmailDAO emailDAO;
+    private final ProductDAO productDAO;
 
     public OrderDAO(OrderRepository orderRepository, UserRepository userRepository, OrderItemDAO orderItemDAO,
-                    EmailDAO emailDAO) {
+                    EmailDAO emailDAO, ProductDAO productDAO) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.orderItemDAO = orderItemDAO;
         this.emailDAO = emailDAO;
+        this.productDAO = productDAO;
     }
 
     public List<ShopOrder> getAllOrders(){
@@ -68,11 +72,21 @@ public class OrderDAO {
     public void sendOrderConfirmationEmail(ShopOrder order) {
         Map<String, Object> variables = new HashMap<>();
         List<OrderItem> orderItems = this.orderItemDAO.getOrderItemsByOrderId(order.getId());
+        List<Product> products = new ArrayList<>();
+        for (int i = 0; i < orderItems.size(); i++) {
+            Optional<Product> product = productDAO.getProductById((long) orderItems.get(i).getProductId());
+            if (product.isEmpty()){
+                return;
+            }
+            products.add(product.get());
+        }
         variables.put("user", order.getUserId());
         variables.put("order", order);
         variables.put("orderItems", orderItems);
+        variables.put("products", products);
 
-        String content = this.emailDAO.buildOrderEmail("order-confirmation", variables);
+
+        String content = this.emailDAO.buildOrderEmail("order-confirmation2", variables);
         this.emailDAO.sendOrderConfirmationEmail(order.getUserId().getEmail(), content, "Order Confirmation");
     }
 

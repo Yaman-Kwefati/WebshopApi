@@ -87,7 +87,7 @@ public class AuthenticationController {
         String token = UUID.randomUUID().toString();
         this.passwordResetTokenDAO.createPasswordResetTokenForUser(user.get(), token);
 
-        String link = "https://yaman-g.nl/reset-password?token="+token;
+        String link = "https://cholietalie.nl/reset-password?token="+token;
         emailDAO.send(userEmail, passwordResetTokenDAO.buildEmail(user.get().getLastname(), link), "Password Change Request");
         return new ApiResponse<>(HttpStatus.OK, "Email sent! Please go back to Our website");
     }
