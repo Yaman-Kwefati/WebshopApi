@@ -44,5 +44,19 @@ public class UserSeeder {
                 .build();
         newUser.isEnabled();
         this.userDAO.saveNewUser(newUser);
+        User newUser2 = User.builder()
+                .firstname("Yaman")
+                .lastname("Kwefati")
+                .email("yamankwefati20@gmail.com")
+                .password(passwordEncoder.encode("yamank77"))
+                .phoneNumber("0625112776")
+                .city("Bodegraven")
+                .street("Koninginneweg 124")
+                .postalCode("2411XV")
+                .userRole(Role.CUSTOMER)
+                .enabled(true)
+                .build();
+        newUser2.isEnabled();
+        this.userDAO.saveNewUser(newUser2);
     }
 }
