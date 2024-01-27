@@ -86,7 +86,7 @@ public class OrderDAO {
         variables.put("products", products);
 
 
-        String content = this.emailDAO.buildOrderEmail("order-confirmation2", variables);
+        String content = this.emailDAO.buildOrderEmail("order-confirmation", variables);
         this.emailDAO.sendOrderConfirmationEmail(order.getUserId().getEmail(), content, "Order Confirmation");
     }
 
