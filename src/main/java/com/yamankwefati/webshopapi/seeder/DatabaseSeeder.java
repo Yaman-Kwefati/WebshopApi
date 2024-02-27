@@ -22,7 +22,7 @@ public class DatabaseSeeder {
             return;
         }
         userSeeder.seed();
-        productSeeder.seed();
+//        productSeeder.seed();
         this.alreadySeeded = true;
     }
 }

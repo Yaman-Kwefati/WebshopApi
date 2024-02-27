@@ -15,26 +15,11 @@ public class UserSeeder {
     private UserDAO userDAO;
     private final PasswordEncoder passwordEncoder;
     public void seed(){
-//        for (int i = 0; i < 20; i++) {
-//            User newUser = User.builder()
-//                    .firstname("User" + i + "firstname")
-//                    .lastname("User" + i + "lastname")
-//                    .email("test"+i+"@gmail.com")
-//                    .password(passwordEncoder.encode("testPassword"))
-//                    .phoneNumber("0625112776")
-//                    .city("Bodegraven")
-//                    .street("Koninginneweg 124")
-//                    .postalCode("2411XV")
-//                    .build();
-//
-//
-//            this.userDAO.saveNewUser(newUser);
-//        }
         User newUser = User.builder()
                 .firstname("Yaman")
                 .lastname("Kwefati")
                 .email("yamankwefati@icloud.com")
-                .password(passwordEncoder.encode("yamank77"))
+                .password(passwordEncoder.encode("123456"))
                 .phoneNumber("0625112776")
                 .city("Bodegraven")
                 .street("Koninginneweg 124")
@@ -44,19 +29,19 @@ public class UserSeeder {
                 .build();
         newUser.isEnabled();
         this.userDAO.saveNewUser(newUser);
-        User newUser2 = User.builder()
-                .firstname("Yaman")
-                .lastname("Kwefati")
-                .email("yamankwefati20@gmail.com")
-                .password(passwordEncoder.encode("yamank77"))
-                .phoneNumber("0625112776")
+        User admin = User.builder()
+                .firstname("Osama")
+                .lastname("Mahzea")
+                .email("omahzea@icloud.com")
+                .password(passwordEncoder.encode("osama1"))
+                .phoneNumber("0629012024")
                 .city("Bodegraven")
-                .street("Koninginneweg 124")
+                .street("1672 Laan")
                 .postalCode("2411XV")
-                .userRole(Role.CUSTOMER)
+                .userRole(Role.ADMIN)
                 .enabled(true)
                 .build();
-        newUser2.isEnabled();
-        this.userDAO.saveNewUser(newUser2);
+        admin.isEnabled();
+        this.userDAO.saveNewUser(admin);
     }
 }
