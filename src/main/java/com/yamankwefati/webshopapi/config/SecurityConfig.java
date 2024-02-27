@@ -53,7 +53,8 @@ public class SecurityConfig {
                                 .requestMatchers( HttpMethod.DELETE,"/api/v1/categories/{categoryName}").hasAuthority("ADMIN")
                                 //Products
                                 .requestMatchers(HttpMethod.GET,"/api/v1/products/all-products").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/api/v1/products/{productName}").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/v1/products/name/{productName}").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/v1/products/id/{productId}").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api/v1/products/new-product").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT,"/api/v1/products/{productId}").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE,"/api/v1/products/{productId}").hasAuthority("ADMIN")

@@ -355,8 +355,7 @@
                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:5px 20px 5px 10px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                             <div style="font-size: 14px; line-height: 140%; text-align: right; word-wrap: break-word;">
-                                                <p style="font-size: 14px; line-height: 140%; text-align: left;"><span style="font-size: 16px; line-height: 22.4px;"
-                                                                                                                       th:text="${'€'+#numbers.formatDecimal(item.getSubtotal() * item.getQuantity() / 100, 1, 'COMMA', 2, 'POINT')}"
+                                                <p style="font-size: 14px; line-height: 140%; text-align: left;"><span style="font-size: 16px; line-height: 22.4px;" th:text="${'Price: €'+#numbers.formatDecimal(item.getSubtotal()/100, 0, 'COMMA', 2, 'POINT')}"
                                                 >Price:</span></p>
                                             </div>
 
@@ -521,7 +520,7 @@
                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 21px 10px 10px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                             <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                <p style="font-size: 14px; line-height: 140%; text-align: right;"><span style="font-size: 16px; line-height: 22.4px;" th:text="${'€'+order.getTotalAmount() + '0'}"><strong>€</strong></span></p>
+                                                <p style="font-size: 14px; line-height: 140%; text-align: right;"><span style="font-size: 16px; line-height: 22.4px;" th:text="${'€'+#numbers.formatDecimal(order.getTotalAmount() / 100, 1, 'COMMA', 2, 'POINT')}"><strong>€</strong></span></p>
                                             </div>
 
                                         </td>

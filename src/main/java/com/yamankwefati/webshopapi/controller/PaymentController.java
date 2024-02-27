@@ -9,16 +9,13 @@ import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.yamankwefati.webshopapi.dao.order.OrderDAO;
-import com.yamankwefati.webshopapi.dao.orderItem.OrderItemDAO;
 import com.yamankwefati.webshopapi.dao.payment.PaymentDAO;
 import com.yamankwefati.webshopapi.dao.product.ProductDAO;
-import com.yamankwefati.webshopapi.dao.user.UserDAO;
 import com.yamankwefati.webshopapi.model.*;
-import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +43,7 @@ public class PaymentController {
                     .setMode(SessionCreateParams.Mode.PAYMENT)
                     .putMetadata("cartItems", cartItemsJson)
                     .setSuccessUrl("https://cholietalie.nl/success")
+                    .setAllowPromotionCodes(true)
                     .setCancelUrl("https://cholietalie.nl/cancel");
 
             for (CartItem item : paymentRequest.getItems()) {
@@ -58,7 +56,9 @@ public class PaymentController {
                                 .setPriceData(
                                         SessionCreateParams.LineItem.PriceData.builder()
                                                 .setCurrency("eur")
-                                                .setUnitAmount(product.getPrice().longValue() * 100)
+                                                .setUnitAmount(BigDecimal.valueOf(product.getPrice())
+                                                        .multiply(BigDecimal.valueOf(100))
+                                                        .longValue())
                                                 .setProductData(
                                                         SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                 .setName(product.getName())
@@ -81,7 +81,8 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ApiResponse<String> handleStripeWebhook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
-        String webhookSecret = "whsec_f2seVH2y3j5Zw3gJZ3YekLhojYGQ172P";
+        String webhookSecret = "whsec_Irpg1zwtEWmyP9Y4nn42N7meCLtYQkc4"; //Live
+//        String webhookSecret = "whsec_f2seVH2y3j5Zw3gJZ3YekLhojYGQ172P"; //test
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
             ObjectMapper objectMapper = new ObjectMapper();
@@ -90,11 +91,13 @@ public class PaymentController {
             JsonNode sessionNode = rootNode.path("data").path("object");
             String customerEmail = sessionNode.path("customer_details").path("email").asText();
             String cartItemsJson = sessionNode.path("metadata").path("cartItems").asText();
+            Long amountSubtotal = sessionNode.path("amount_subtotal").asLong();
+            Long totalAmount = sessionNode.path("amount_total").asLong();
             List<CartItem> cartItems = objectMapper.readValue(cartItemsJson, new TypeReference<List<CartItem>>() {});
 
             if (!cartItems.isEmpty() && !customerEmail.isEmpty()) {
-                long amountTotal = this.paymentDAO.calculateOrderTotalAmount(cartItems);
-                this.paymentDAO.processSuccessfulPayment(amountTotal, customerEmail, cartItems);
+//                long amountTotal = this.paymentDAO.calculateOrderTotalAmount(cartItems);
+                this.paymentDAO.processSuccessfulPayment(totalAmount, customerEmail, cartItems, amountSubtotal);
             }
 
             return new ApiResponse<>(HttpStatus.OK, "OK");
