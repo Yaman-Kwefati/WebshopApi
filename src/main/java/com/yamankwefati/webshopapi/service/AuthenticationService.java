@@ -71,7 +71,7 @@ public class AuthenticationService {
                 .build();
 
         this.confirmationTokenDAO.saveConfirmationToken(confirmationToken);
-        String link = "https://yaman-g.nl/api/v1/auth/register/confirm?token="+token+"&userId="+user.getId();
+        String link = "https://cholietalie.nl/api/v1/auth/register/confirm?token="+token+"&userId="+user.getId();
         this.emailDAO.send(request.getEmail(), buildEmail(request.getLastname(), link), "Confirm Your Email");
 
         var jwtToken = jwtService.generateToken(user);
@@ -211,6 +211,7 @@ public class AuthenticationService {
                 "\n" +
                 "See you there!\n" +
                 "\n" +
-                "Best regards, Our Company team";
+                "Best regards,\n" +
+                "Cholie Talie";
     }
 }
