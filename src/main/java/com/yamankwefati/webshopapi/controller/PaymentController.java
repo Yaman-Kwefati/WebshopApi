@@ -81,8 +81,8 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ApiResponse<String> handleStripeWebhook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
-        String webhookSecret = "whsec_Irpg1zwtEWmyP9Y4nn42N7meCLtYQkc4"; //Live
-//        String webhookSecret = "whsec_f2seVH2y3j5Zw3gJZ3YekLhojYGQ172P"; //test
+       // String webhookSecret = ; //Live
+//        String webhookSecret = ; //test
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
             ObjectMapper objectMapper = new ObjectMapper();
